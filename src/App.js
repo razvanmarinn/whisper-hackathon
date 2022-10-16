@@ -1,7 +1,6 @@
 import MicRecorder from 'mic-recorder-to-mp3';
 import React,{useState,useEffect} from 'react';
-
-
+import { useSpeechSynthesis } from "react-speech-kit";
 
 
  const Mp3Recorder = new MicRecorder({ bitRate: 128 });
@@ -11,7 +10,7 @@ import React,{useState,useEffect} from 'react';
 
 
 const App = ()=>{
-
+const { speak } = useSpeechSynthesis();
   const [state,setState] = useState({
   isRecording: false,
   blobURL: '',
@@ -55,6 +54,7 @@ const stop = () => {
       return fetch('http://localhost:5000/whisper',{method:'POST',body: formatData}).then((res)=>{
         fetch('http://localhost:5000/getapi').then((res)=>res.json()).then(res=>{
           setResult(res);
+          speak({text: res.results[0].answer});
     })})})}
     return( <>
 <button onClick={()=>start()} disabled={state.isRecording}>
@@ -63,8 +63,9 @@ const stop = () => {
 <button onClick={()=>stop()} disabled={!state.isRecording}>
   Stop
 </button>
-<audio src={state.blobURL} controls="controls" />
-{result ? <p>{result.results[0].transcript}</p> : ''}
+
+{result ? <><p>{result.results[0].transcript}</p> <p>{result.results[0].answer}</p></> : '' }
+
 
       
 </>)
