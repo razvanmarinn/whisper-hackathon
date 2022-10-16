@@ -1,7 +1,9 @@
 import MicRecorder from 'mic-recorder-to-mp3';
 import React,{useState,useEffect} from 'react';
 import { useSpeechSynthesis } from "react-speech-kit";
-
+import './App.css'
+import { BiMicrophone } from "react-icons/bi";
+import { BiMicrophoneOff } from "react-icons/bi";
 
  const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
@@ -56,19 +58,22 @@ const stop = () => {
           setResult(res);
           speak({text: res.results[0].answer});
     })})})}
-    return( <>
-<button onClick={()=>start()} disabled={state.isRecording}>
-  Record
+    return( <><div className='flex justify-center items-center h-screen w-screen flex-col'>
+      <div className='space-x-[5rem] mb-[2rem]'>
+<button onClick={()=>start()} disabled={state.isRecording} className='text-[2rem] active:text-red-800 focus:text-red-800 disable:text-black'>
+ < BiMicrophone/>
 </button>
-<button onClick={()=>stop()} disabled={!state.isRecording}>
-  Stop
+<button onClick={()=>stop()} disabled={!state.isRecording} className='text-[2rem] active:text-red-800 focus:text-red-800 disable:text-black'>
+  <BiMicrophoneOff/>
 </button>
+</div>
+     
 
-{result ? <><p>{result.results[0].transcript}</p> <p>{result.results[0].answer}</p></> : '' }
+{result ? <><p className='text-[2rem] mb-[12px]'>{result.results[0].transcript}</p> <p className='text-[2rem]'>{result.results[0].answer}</p></> : '' }
 
 
       
-</>)
+</div></> )
 
 
 }
